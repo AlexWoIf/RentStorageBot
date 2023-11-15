@@ -15,6 +15,8 @@ class Item(models.Model):
         max_length=50
     )
 
+    def __str__(self):
+        return self.type
 
 class Container(models.Model):
     size = models.CharField(

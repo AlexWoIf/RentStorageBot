@@ -9,6 +9,13 @@ class Customer(models.Model):
         return self.name
 
 
+class Item(models.Model):
+    type = models.CharField(
+        'Тип предмета',
+        max_length=50
+    )
+
+
 class Container(models.Model):
     size = models.CharField(
         max_length=20,
@@ -34,8 +41,20 @@ class Container(models.Model):
         Customer,
         verbose_name='Кем занят',
         related_name='containers',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    filled_by = models.ForeignKey(
+        Item,
+        verbose_name='Чем заполнен',
+        null=True, blank=True,
         on_delete=models.CASCADE
     )
 
+
+
     def __str__(self):
         return f'Контейнер {self.pk}'
+
+
+

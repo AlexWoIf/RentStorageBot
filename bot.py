@@ -10,9 +10,9 @@ from telegram.ext import (
     MessageHandler,
     Filters,
 )
+from fetch_from_db import fetch_from_db
 from settings import LOG_LEVEL, BOT_TOKEN
 
-from steps_data import get_step, get_buttons
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -46,6 +46,7 @@ def send_step(update, context, step_id):
 
 def main_handler(update: Update, context: CallbackContext):
     step_id = context.user_data.get('step_id', 0)
+    data = fetch_from_db(step_id)
     buttons = get_buttons(step_id)
     logging.debug(f'{step_id=} {buttons=}')
     for button in buttons:

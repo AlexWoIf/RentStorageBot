@@ -85,6 +85,9 @@ target/
 __pycache__/
 local_settings.py
 
+### My ignores ###
+*.pdf
+*.zip
 .env
 db.sqlite3
 media/

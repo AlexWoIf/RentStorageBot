@@ -1,18 +1,19 @@
 import logging
-from telegram import Update
+from telegram import (
+    Update,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+)
 from telegram.ext import (
     Updater,
     CallbackContext,
     CommandHandler,
     MessageHandler,
-    ConversationHandler,
     Filters,
 )
 from settings import LOG_LEVEL, BOT_TOKEN
 
-
-STARTED = 1
-
+from steps_data import get_step, get_buttons
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,17 +22,34 @@ logging.basicConfig(
 )
 
 
-def start(update: Update, context: CallbackContext):
+def send_step(update, context, step_id):
+    buttons = get_buttons(step_id)
+    keyboard = [
+        [KeyboardButton(button['text'])] for button in buttons
+    ]
+    logging.debug(f'{buttons=} {keyboard=}')
+    reply_markup = ReplyKeyboardMarkup(keyboard)
+    step = get_step(step_id)
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Рад что Вы заинтересовались нашим сервисом!\n'
-             'Ниже расположены кнопки с вашими возможными вопросами 👇',
+        text=step['text'],
+        reply_markup=reply_markup,
     )
-    return STARTED
 
 
-def help(update, context):
-    pass
+def main_handler(update: Update, context: CallbackContext):
+    step_id = context.user_data.get('step_id', 0)
+    buttons = get_buttons(step_id)
+    logging.debug(f'{step_id=} {buttons=}')
+    for button in buttons:
+        if button['text'] in update.message.text:
+            next_step = button['next_step']
+            context.user_data['step_id'] = next_step
+            send_step(update, context, next_step)
+            return
+
+    # тут обрабатываем пользовательский ввод если он присутствует
+    # в данном шаге (и то что не подходит под команды на кнопках)
 
 
 # функция main
@@ -42,17 +60,7 @@ if __name__ == '__main__':
     )
     dispatcher = updater.dispatcher
 
-    conv_handler = ConversationHandler(
-        entry_points=[
-                CommandHandler('start', start),
-        ],
-        states={
-            STARTED: [
-            ],
-        },
-        fallbacks=[]
-    )
-    dispatcher.add_handler(conv_handler)
+    dispatcher.add_handler(MessageHandler(Filters.text, main_handler))
 
     updater.start_polling()
     # обработчик нажатия Ctrl+C

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Customer, Container, Item
+from .models import Customer, Container, Reservation, Delivery, Step, Button
 
 
 @admin.register(Customer)
@@ -11,10 +11,25 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Container)
 class ContainerAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'size', 'available', 'start_date', 'end_date',)
+    list_display = ('pk', 'size', 'available', )
     list_filter = ('size', 'available')
 
 
-@admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
-    list_filter = ('type',)
+@admin.register(Reservation)
+class ReservationAdmin(admin.ModelAdmin):
+    list_filter = ('customer', )
+
+
+@admin.register(Delivery)
+class DeliveryAdmin(admin.ModelAdmin):
+    list_filter = ('date', )
+
+
+@admin.register(Step)
+class StepAdmin(admin.ModelAdmin):
+    list_filter = ('name', )
+
+
+@admin.register(Button)
+class ButtonAdmin(admin.ModelAdmin):
+    list_filter = ('text', )

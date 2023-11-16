@@ -38,7 +38,7 @@ j = '''
         },{
             "step_id": 1,
             "text": "Забрать вещи",
-            "next_step": 255
+            "next_step": 0
         },{
             "step_id": 2,
             "text": "Контакты",
@@ -62,15 +62,15 @@ j = '''
         },{
             "step_id": 2,
             "text": "Своими силами",
-            "next_step": 255
+            "next_step": 0
         },{
             "step_id": 2,
             "text": "Бесплатная доставка из дома",
-            "next_step": 255
+            "next_step": 0
         },{
             "step_id": 3,
             "text": "Выбрать бокс",
-            "next_step": 255
+            "next_step": 0
         },{
             "step_id": 3,
             "text": "Назад",

@@ -7,7 +7,6 @@ from telegram import (
 from telegram.ext import (
     Updater,
     CallbackContext,
-    CommandHandler,
     MessageHandler,
     Filters,
 )
@@ -23,13 +22,21 @@ logging.basicConfig(
 
 
 def send_step(update, context, step_id):
-    buttons = get_buttons(step_id)
+    if step_id:
+        buttons = get_buttons(step_id)
+        step = get_step(step_id)
+    else:
+        buttons = [{"text": "/start"}]
+        step = {"text": "Мы вернулись к началу диалога. Нажмите /start"}
+
     keyboard = [
         [KeyboardButton(button['text'])] for button in buttons
     ]
-    logging.debug(f'{buttons=} {keyboard=}')
-    reply_markup = ReplyKeyboardMarkup(keyboard)
-    step = get_step(step_id)
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard,
+        one_time_keyboard=True,
+    )
+
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=step['text'],

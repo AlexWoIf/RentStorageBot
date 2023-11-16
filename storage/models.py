@@ -99,6 +99,14 @@ class Step(models.Model):
         'Текст сообщения в шаге',
         null=True, blank=True
     )
+    previous = models.ForeignKey(
+        'self',
+        related_name='next',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        verbose_name='Связь между шагами'
+
+    )
 
     def __str__(self):
         return self.name

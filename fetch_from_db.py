@@ -22,5 +22,6 @@ def fetch_from_db(step_id, previous_step=None):
         return step_params
     else:
         fetched_step.previous = previous_step
+        fetched_step.save()
         step_params['previous'] = fetched_step.previous
         return step_params

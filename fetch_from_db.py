@@ -8,8 +8,8 @@ django.setup()
 from storage.models import Step
 
 
-def fetch_from_db(step, previous_step=None):
-    fetched_step = Step.objects.get(name=step)
+def fetch_from_db(step_id, previous_step=None):
+    fetched_step = Step.objects.get(id=step_id)
     name = fetched_step.name
     text = fetched_step.text
     buttons = fetched_step.buttons.all()
@@ -21,5 +21,6 @@ def fetch_from_db(step, previous_step=None):
     if not previous_step:
         return step_params
     else:
-        step_params['previous'] = Step.objects.get(name=previous_step)
+        fetched_step.previous = previous_step
+        step_params['previous'] = fetched_step.previous
         return step_params

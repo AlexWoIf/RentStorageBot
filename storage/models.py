@@ -1,12 +1,34 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class Customer(models.Model):
-    name = models.CharField('Имя клиента', max_length=100)
+    name = models.CharField(
+        'Имя клиента',
+        max_length=100
+    )
+    last_name = models.CharField(
+        'Имя клиента 2',
+        max_length=100,
+        null=True, blank=True
+    )
+    username = models.CharField(
+        'Имя клиента 3',
+        max_length=100,
+        null=True, blank=True
+    )
     phone_number = models.CharField('Номер клиента', max_length=20)
     pure_phone = PhoneNumberField(
         'Нормализованный Номер владельца',
         blank=True, null=True
+    )
+    is_bot = models.BooleanField(
+        verbose_name='Бот или нет',
+        null=True, blank=True
+    )
+    language_code = models.CharField(
+        'Код языка', max_length=10,
+        null=True, blank=True
     )
 
     def __str__(self):
@@ -146,3 +168,6 @@ class Session(models.Model):
         blank=True,
         related_name='sessions'
     )
+
+    def __str__(self):
+        return self.user.name

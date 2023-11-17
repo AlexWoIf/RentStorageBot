@@ -159,7 +159,10 @@ class Button(models.Model):
         max_length=50,
         null=True, blank=True
     )
-    order = models
+    order = models.IntegerField(
+        'Место кнопки',
+        null=True, blank=True
+    )
     next_step = models.ManyToManyField(
         Step,
         verbose_name='На какой шаг перейти',

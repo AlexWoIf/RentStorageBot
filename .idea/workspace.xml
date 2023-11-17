@@ -7,7 +7,8 @@
     <list default="true" id="8fc19dc4-b702-4f2b-ac53-95f3ffa1fe7e" name="Changes" comment="Delete .idea directory">
       <changelist_data name="AlexWoIf" email="33956363+alexwoif@users.noreply.github.com" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/migrations/0009_auto_20231116_1755.py" beforeDir="false" afterPath="$PROJECT_DIR$/storage/migrations/0009_auto_20231116_1755.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SelfStorage/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SelfStorage/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/storage/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

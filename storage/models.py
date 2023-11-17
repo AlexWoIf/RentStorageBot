@@ -1,9 +1,13 @@
 from django.db import models
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Customer(models.Model):
     name = models.CharField('Имя клиента', max_length=100)
     phone_number = models.CharField('Номер клиента', max_length=20)
+    pure_phone = PhoneNumberField(
+        'Нормализованный Номер владельца',
+        blank=True, db_index=True
+    )
 
     def __str__(self):
         return self.name

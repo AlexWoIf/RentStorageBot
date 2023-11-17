@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'phonenumber_field',
     'storage.apps.StorageConfig',
     'django.contrib.admin',
     'django.contrib.auth',

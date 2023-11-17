@@ -44,6 +44,14 @@ def fill_up_buttons(apps, schema_editor):
             "text": "Забрать вещи",
         },
         {
+            "step": ["Способ складирования", ],
+            "text": "Своими силами",
+        },
+        {
+            "step": ["Способ складирования", ],
+            "text": "Бесплатная доставка из дома",
+        },
+        {
             "step": [
                 "Правила аренды",
                 "Способ складирования",
@@ -63,14 +71,7 @@ def fill_up_buttons(apps, schema_editor):
             ],
             "text": "Назад",
         },
-        {
-            "step": ["Способ складирования",],
-            "text": "Своими силами",
-        },
-        {
-            "step": ["Способ складирования",],
-            "text": "Бесплатная доставка из дома",
-        }
+
     ]
     for button in buttons:
         steps = [Step.objects.get(name=step) for step in button['step']]

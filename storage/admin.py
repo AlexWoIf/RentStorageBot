@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Customer, Container, Reservation, Delivery, Step, Button
+from .models import Customer, Container, Reservation, Delivery, Step, Button, Session
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone_number')
+    list_display = ('name', 'last_name', 'phone_number')
 
 
 @admin.register(Container)
@@ -33,3 +33,8 @@ class StepAdmin(admin.ModelAdmin):
 @admin.register(Button)
 class ButtonAdmin(admin.ModelAdmin):
     list_filter = ('text', )
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    list_filter = ('user', )

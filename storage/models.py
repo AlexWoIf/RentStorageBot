@@ -115,7 +115,7 @@ class Step(models.Model):
 class Button(models.Model):
     step = models.ManyToManyField(
         Step,
-        verbose_name='Прикрепленный шаг',
+        verbose_name='Прикрепленные шаги',
         blank=True,
         related_name='buttons'
     )
@@ -127,3 +127,18 @@ class Button(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Session(models.Model):
+    user = models.OneToOneField(
+        Customer,
+        verbose_name='С кем сессия',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    steps = models.ManyToManyField(
+        Step,
+        verbose_name='Прикрепленные шаги',
+        blank=True,
+        related_name='sessions'
+    )

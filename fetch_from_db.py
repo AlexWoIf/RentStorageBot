@@ -8,8 +8,8 @@ django.setup()
 from storage.models import Step
 
 
-def fetch_from_db(step_id, previous_step=None):
-    fetched_step = Step.objects.get(id=step_id)
+def fetch_from_db(step, previous_step=None):
+    fetched_step = Step.objects.get(name=step)
     name = fetched_step.name
     text = fetched_step.text
     buttons = fetched_step.buttons.all()

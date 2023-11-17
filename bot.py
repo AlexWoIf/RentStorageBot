@@ -21,16 +21,20 @@ logging.basicConfig(
 )
 
 
-def send_step(update, context, step_id):
-    if step_id:
-        buttons = get_buttons(step_id)
-        step = get_step(step_id)
+START = 'START'
+
+
+def send_step(update, context, step_name):
+    if step_name != START:
+        data = fetch_from_db(step_name)
+        buttons = data['buttons']
+        step_text = data['text']
     else:
-        buttons = [{"text": "/start"}]
-        step = {"text": "Мы вернулись к началу диалога. Нажмите /start"}
+        buttons = ["/start"]
+        step_text = "Мы вернулись к началу диалога. Нажмите /start"
 
     keyboard = [
-        [KeyboardButton(button['text'])] for button in buttons
+        [KeyboardButton(button)] for button in buttons
     ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard,
@@ -39,19 +43,23 @@ def send_step(update, context, step_id):
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=step['text'],
+        text=step_text,
         reply_markup=reply_markup,
     )
 
 
 def main_handler(update: Update, context: CallbackContext):
-    step_id = context.user_data.get('step_id', 0)
-    data = fetch_from_db(step_id)
-    buttons = get_buttons(step_id)
-    logging.debug(f'{step_id=} {buttons=}')
+    step_name = context.user_data.get('step_name', START)
+    if step_name == START:
+        buttons = ['/start',]
+    else:
+        data = fetch_from_db(step_name)
+        buttons = data['buttons']
+    logging.debug(f'{step_name=} {buttons=}')
     for button in buttons:
-        if button['text'] in update.message.text:
-            next_step = button['next_step']
+        logging.debug(f'{update.message.text=} {button=}')
+        if button in update.message.text:
+            next_step = button
             context.user_data['step_id'] = next_step
             send_step(update, context, next_step)
             return

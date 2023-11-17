@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta
-
+import phonenumbers
 import django
 from django.utils import timezone
 
@@ -24,6 +24,12 @@ def update_db(size, item, time, customer,
             name=customer,
             phone_number=phone_number
         )
+        normal_number = phonenumbers.parse(
+            new_customer.phone_number, "RU"
+        )
+        if phonenumbers.is_valid_number(normal_number):
+            new_customer.pure_phone = normal_number
+        new_customer.save()
 
         new_reservation = Reservation.objects.create(
             customer=new_customer,

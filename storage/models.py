@@ -6,7 +6,7 @@ class Customer(models.Model):
     phone_number = models.CharField('Номер клиента', max_length=20)
     pure_phone = PhoneNumberField(
         'Нормализованный Номер владельца',
-        blank=True, db_index=True
+        blank=True, null=True
     )
 
     def __str__(self):

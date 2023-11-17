@@ -14,7 +14,8 @@ def start_session(user):
     )
 
 
+#поменять session на юзера
 def add_step_to_session(session, step):
     session.steps.add(step)
 
-
+#добавить def remove_step_from_session(user, step)

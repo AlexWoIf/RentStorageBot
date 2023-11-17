@@ -17,6 +17,15 @@ class Customer(models.Model):
         max_length=100,
         null=True, blank=True
     )
+    self_name = models.CharField(
+        'Имя клиента 4',
+        max_length=100,
+        null=True, blank=True
+    )
+    telegram_id = models.IntegerField(
+        'id клиента',
+        null=True, blank=True
+    )
     phone_number = models.CharField('Номер клиента', max_length=20)
     pure_phone = PhoneNumberField(
         'Нормализованный Номер владельца',
@@ -149,6 +158,13 @@ class Button(models.Model):
         'Текст кнопки',
         max_length=50,
         null=True, blank=True
+    )
+    order = models
+    next_step = models.ManyToManyField(
+        Step,
+        verbose_name='На какой шаг перейти',
+        blank=True,
+        related_name='prev_buttons'
     )
 
     def __str__(self):

@@ -24,7 +24,10 @@ def get_or_create_session(telegram_id):
         user=user
     )
     last_step = session.steps.last()
-    return last_step.id
+    if last_step.id:
+        return last_step.id
+    else:
+        return None
 
 
 def add_step_to_session(telegram_id, step_id):

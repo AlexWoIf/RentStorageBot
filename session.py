@@ -24,7 +24,7 @@ def get_or_create_session(telegram_id):
         user=user
     )
     last_step = session.steps.last()
-    if last_step.id:
+    if last_step:
         return last_step.id
     else:
         return None

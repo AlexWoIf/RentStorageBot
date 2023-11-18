@@ -8,11 +8,12 @@ django.setup()
 from storage.models import Session
 
 
-def start_session(user):
-    Session.objects.create(
+def get_or_create_session(user):
+    session = Session.objects.get_or_create(
         user=user
     )
 
+    return session
 
 def add_step_to_session(user, step):
     session = Session.objects.get(user=user)

@@ -13,6 +13,12 @@ from telegram.ext import (
 from fetch_from_db import fetch_from_db
 from settings import LOG_LEVEL, BOT_TOKEN
 
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SelfStorage.settings')
+django.setup()
+from storage.models import Step
+
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,21 +27,21 @@ logging.basicConfig(
 )
 
 
-START = 'START'
+START = 0
 
 
-def send_step(update, context, step_name):
-    if step_name != START:
-        data = fetch_from_db(step_name)
-        buttons = data['buttons']
-        step_text = data['text']
+def send_step(update, context, step_id):
+    if step_id != START:
+        step = Step.objects.get(id=step_id)
+        buttons = step.buttons.all()
+        step_text = step.text
+        keyboard = [
+            [KeyboardButton(button.text)] for button in buttons
+        ]
     else:
-        buttons = ["/start"]
+        keyboard = [["/start"]]
         step_text = "Мы вернулись к началу диалога. Нажмите /start"
 
-    keyboard = [
-        [KeyboardButton(button)] for button in buttons
-    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard,
         one_time_keyboard=True,
@@ -49,17 +55,20 @@ def send_step(update, context, step_name):
 
 
 def main_handler(update: Update, context: CallbackContext):
-    step_name = context.user_data.get('step_name', START)
-    if step_name == START:
-        buttons = ['/start',]
-    else:
-        data = fetch_from_db(step_name)
-        buttons = data['buttons']
-    logging.debug(f'{step_name=} {buttons=}')
+    step_id = context.user_data.get('step_id', 0)
+    logging.debug(f'{step_id=}')
+    if not step_id:
+        if '/start' in update.message.text:
+            context.user_data['step_id'] = 1
+            send_step(update, context, 1)
+        return
+    step = Step.objects.get(id=step_id)
+    buttons = step.buttons.all()
+    logging.debug(f'{step=} {buttons=}')
     for button in buttons:
         logging.debug(f'{update.message.text=} {button=}')
-        if button in update.message.text:
-            next_step = button
+        if button.text in update.message.text:
+            next_step = button.next_step.id
             context.user_data['step_id'] = next_step
             send_step(update, context, next_step)
             return

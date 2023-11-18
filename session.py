@@ -17,10 +17,10 @@ def get_or_create_user(name, telegram_id):
 
 # создаем или берем юзера, возвращаем последний шаг его сессии
 def get_or_create_session(telegram_id):
-    user = Customer.objects.get_or_create(
+    user, is_found = Customer.objects.get_or_create(
         telegram_id=telegram_id
     )
-    session = Session.objects.get_or_create(
+    session, is_found = Session.objects.get_or_create(
         user=user
     )
 

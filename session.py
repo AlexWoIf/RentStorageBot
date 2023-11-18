@@ -46,4 +46,6 @@ def remove_last_step_from_session(telegram_id):
     last_step = session.steps.last()
     session.steps.remove(last_step)
 
+    last_step = session.steps.last()
+
     return last_step.id

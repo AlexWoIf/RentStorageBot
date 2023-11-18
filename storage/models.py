@@ -26,7 +26,11 @@ class Customer(models.Model):
         'id клиента',
         null=True, blank=True
     )
-    phone_number = models.CharField('Номер клиента', max_length=20)
+    phone_number = models.CharField(
+        'Номер клиента',
+        max_length=20,
+        null=True, blank=True
+    )
     pure_phone = PhoneNumberField(
         'Нормализованный Номер владельца',
         blank=True, null=True

@@ -28,6 +28,7 @@ logging.basicConfig(
 
 
 START = 0
+BACK = 'Назад'
 
 
 def send_step(update, context, step_id):
@@ -68,7 +69,11 @@ def main_handler(update: Update, context: CallbackContext):
     for button in buttons:
         logging.debug(f'{update.message.text=} {button=}')
         if button.text in update.message.text:
+            if button.text == BACK:
+                continue
             next_step = button.next_step.id
+            if not next_step:
+                next_step = 0
             context.user_data['step_id'] = next_step
             send_step(update, context, next_step)
             return

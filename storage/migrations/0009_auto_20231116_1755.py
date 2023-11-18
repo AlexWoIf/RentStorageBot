@@ -71,7 +71,18 @@ def fill_up_buttons(apps, schema_editor):
             ],
             "text": "Назад",
         },
-
+        {
+            "step": ["Выбор боксов 1", ],
+            "text": "1",
+        },
+        {
+            "step": ["Выбор боксов 1", ],
+            "text": "2",
+        },
+        {
+            "step": ["Выбор боксов 1", ],
+            "text": "3",
+        }
     ]
     for button in buttons:
         steps = [Step.objects.get(name=step) for step in button['step']]

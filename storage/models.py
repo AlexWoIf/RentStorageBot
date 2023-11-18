@@ -163,11 +163,12 @@ class Button(models.Model):
         'Место кнопки',
         null=True, blank=True
     )
-    next_step = models.ManyToManyField(
+    next_step = models.ForeignKey(
         Step,
         verbose_name='На какой шаг перейти',
-        blank=True,
-        related_name='prev_buttons'
+        blank=True, null=True,
+        on_delete=models.CASCADE,
+        related_name='from_button'
     )
 
     def __str__(self):

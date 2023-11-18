@@ -23,8 +23,8 @@ def get_or_create_session(telegram_id):
     session, is_found = Session.objects.get_or_create(
         user=user
     )
-
-    return session.steps.last()
+    last_step = session.steps.last()
+    return last_step.id
 
 
 def add_step_to_session(telegram_id, step_id):

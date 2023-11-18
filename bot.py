@@ -10,7 +10,6 @@ from telegram.ext import (
     MessageHandler,
     Filters,
 )
-from fetch_from_db import fetch_from_db
 from settings import LOG_LEVEL, BOT_TOKEN
 
 import os
@@ -19,6 +18,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SelfStorage.settings')
 django.setup()
 from storage.models import Step
 
+from fetch_from_db import fetch_from_db
+from session import (
+    get_or_create_session,
+    add_step_to_session,
+    remove_last_step_from_session
+)
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -56,11 +61,13 @@ def send_step(update, context, step_id):
 
 
 def main_handler(update: Update, context: CallbackContext):
-    step_id = context.user_data.get('step_id', 0)
+    # step_id = context.user_data.get('step_id', 0)
+    logging.debug(f'{update.message.from_user.id=}')
+    step_id = get_or_create_session(update.message.from_user.id)
     logging.debug(f'{step_id=}')
     if not step_id:
         if '/start' in update.message.text:
-            context.user_data['step_id'] = 1
+            add_step_to_session(update.message.from_user.id, 1)
             send_step(update, context, 1)
         return
     step = Step.objects.get(id=step_id)
@@ -70,11 +77,15 @@ def main_handler(update: Update, context: CallbackContext):
         logging.debug(f'{update.message.text=} {button=}')
         if button.text in update.message.text:
             if button.text == BACK:
-                continue
+                next_step = remove_last_step_from_session(
+                    update.message.from_user.id)
+                send_step(update, context, next_step)
+                return
             next_step = button.next_step.id
-            if not next_step:
+            if next_step:
+                add_step_to_session(update.message.from_user.id, next_step)
+            else:
                 next_step = 0
-            context.user_data['step_id'] = next_step
             send_step(update, context, next_step)
             return
 

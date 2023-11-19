@@ -43,6 +43,11 @@ class Customer(models.Model):
         'Код языка', max_length=10,
         null=True, blank=True
     )
+    address = models.CharField(
+        'Адрес клиента',
+        max_length=100,
+        null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -69,6 +74,15 @@ class Reservation(models.Model):
         max_length=100,
         null=True, blank=True
     )
+    status = models.IntegerField(
+        'Статус заявки',
+        choices=(
+            (1, 'Ждет поступления'),
+            (2, 'На складе'),
+            (3, 'Выполнено'),
+        ),
+        null=True, blank=True
+    )
 
     def __str__(self):
         return f'Заказ {self.pk}'
@@ -77,6 +91,22 @@ class Reservation(models.Model):
 class Delivery(models.Model):
     date = models.DateTimeField(
         'Дата доставки',
+        null=True, blank=True
+    )
+    customer = models.ForeignKey(
+        Customer,
+        verbose_name='Кому доставлять',
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        related_name='deliveries'
+    )
+    status = models.IntegerField(
+        'Статус доставки',
+        choices=(
+            (1, 'Оформлено'),
+            (2, 'В пути'),
+            (3, 'Доставлено'),
+        ),
         null=True, blank=True
     )
 

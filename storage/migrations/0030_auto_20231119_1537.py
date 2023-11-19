@@ -177,8 +177,8 @@ def fill_up_buttons(apps, schema_editor):
         new_button, is_found = Button.objects.get_or_create(
             text=button['text']
         )
-
-        new_button.step.set(steps)
+        for step in steps:
+            new_button.step.add(step)
 
 
 def add_order_to_buttons(apps, schema_editor):

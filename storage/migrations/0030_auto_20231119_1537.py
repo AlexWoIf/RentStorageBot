@@ -7,7 +7,7 @@ def fill_up_steps(apps, schema_editor):
     Step = apps.get_model('storage', 'Step')
     steps = [
         {
-            "name": "Выбор боксов",
+            "name": "Выбор боксов new 1",
             "text": """Мы предлагаем несколько видов боксов.
 
                     1) Локер - площадь 1 кв/м
@@ -36,6 +36,35 @@ def fill_up_steps(apps, schema_editor):
                     """
         },
         {
+            "name": "Выбор боксов new 2",
+            "text": """Мы предлагаем несколько видов боксов.
+
+                        1) Локер - площадь 1 кв/м
+                            Высота 1м
+                            Цена: от 1560 руб/мес
+
+                        2) Низкие  - площадь 1.5 - 3 кв/м
+                            Высота 1м
+                            Цена: от 2700 руб/мес
+
+                        3) Антресольные - площадь 1.5 - 2 кв/м
+                            Высота 1м
+                            Цена: от 1980 руб/мес
+
+                        4) Стандартные - площадь 1 - 5 кв/м
+                             Высота от 2м
+                             Цена: от  2400 руб/мес
+
+                        5) Большие - площадь 6 - 10 кв/м
+                            Высота от 2м
+                            Цена: от 9600 руб/мес
+
+                        6) Безразмерные - площадь от 10 кв/м
+                            До бесконечности
+                            Цена: по  запросу
+                        """
+        },
+        {
             "name": "Выбор адреса склада",
             "text": """Выберете 1 из наших складов:
 
@@ -61,29 +90,64 @@ def fill_up_buttons(apps, schema_editor):
     Step = apps.get_model('storage', 'Step')
     buttons = [
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Локер",
         },
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Стандартный",
         },
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Низкий",
         },
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Большой",
         },
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Антресольный",
         },
         {
-            "step": ["Выбор боксов", ],
+            "step": ["Выбор боксов new 1", ],
             "text": "Безразмерный",
         },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Локер",
+        },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Стандартный",
+        },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Низкий",
+        },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Большой",
+        },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Антресольный",
+        },
+        {
+            "step": ["Выбор боксов new 2", ],
+            "text": "Безразмерный",
+        },
+    ]
+    for button in buttons:
+        steps = [Step.objects.get(name=step) for step in button['step']]
+
+        new_button = Button.objects.create(
+            text=button['text']
+        )
+
+        new_button.step.set(steps)
+
+    buttons = [
         {
             "step": ["Выбор адреса склада", ],
             "text": "1",
@@ -97,11 +161,13 @@ def fill_up_buttons(apps, schema_editor):
             "text": "3",
         },
         {
-            "step": ["Выбор боксов", "Выбор адреса склада"],
+            "step": ["Выбор боксов new 1", "Выбор боксов new 2",
+                     "Выбор адреса склада", "Адрес клиента"],
             "text": "Назад",
         },
         {
-            "step": ["Выбор боксов", "Выбор адреса склада"],
+            "step": ["Выбор боксов new 1", "Выбор боксов new 2",
+                     "Выбор адреса склада", "Адрес клиента"],
             "text": "Контакты",
         },
     ]
@@ -144,24 +210,72 @@ def add_order_to_buttons(apps, schema_editor):
         },
     ]
     for button in buttons:
-        new_button = Button.objects.get(
+        new_buttons = Button.objects.filter(
             text=button['text']
         )
-        new_button.order = button['order']
-        new_button.save()
+        for new_button in new_buttons:
+            new_button.order = button['order']
+            new_button.save()
+
+
+def add_next_step_to_buttons(apps, schema_editor):
+    Button = apps.get_model('storage', 'Button')
+    Step = apps.get_model('storage', 'Step')
+    buttons = [
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Локер",
+        },
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Стандартный",
+        },
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Низкий",
+        },
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Большой",
+        },
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Антресольный",
+        },
+        {
+            "step": ["Выбор адреса склада", "Адрес клиента"],
+            "text": "Безразмерный",
+        },
+    ]
+    for button in buttons:
+        step1 = Step.objects.get(name=button['step'][0])
+        step2 = Step.objects.get(name=button['step'][1])
+
+        new_buttons = Button.objects.filter(
+            text=button['text']
+        )
+
+        button1 = new_buttons.first()
+        button2 = new_buttons.last()
+
+        button1.next_step = step1
+        button1.save()
+
+        button2.next_step = step2
+        button2.save()
 
 
 def sort_buttons(apps, schema_editor):
     Step = apps.get_model('storage', 'Step')
     steps = [
-            "Выбор боксов",
+            "Выбор боксов new 1",
+            "Выбор боксов new 2",
             "Выбор адреса склада",
             "Адрес клиента",
     ]
     for step in steps:
         new_step = Step.objects.get(name=step)
         new_step.buttons.all().order_by('order')
-
 
 
 class Migration(migrations.Migration):
@@ -174,5 +288,6 @@ class Migration(migrations.Migration):
         migrations.RunPython(fill_up_steps),
         migrations.RunPython(fill_up_buttons),
         migrations.RunPython(add_order_to_buttons),
+        migrations.RunPython(add_next_step_to_buttons),
         migrations.RunPython(sort_buttons)
     ]

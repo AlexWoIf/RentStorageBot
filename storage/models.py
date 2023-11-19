@@ -43,6 +43,11 @@ class Customer(models.Model):
         'Код языка', max_length=10,
         null=True, blank=True
     )
+    address = models.CharField(
+        'Адрес клиента',
+        max_length=100,
+        null=True, blank=True
+    )
 
     def __str__(self):
         return self.name

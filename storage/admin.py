@@ -4,6 +4,10 @@ from django.contrib import admin
 from .models import Customer, Container, Reservation, Delivery, Step, Button, Session
 
 
+class StepAdminInline(admin.TabularInline):
+    model = Step.buttons.through
+
+
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name', 'last_name', 'phone_number')
@@ -28,6 +32,8 @@ class DeliveryAdmin(admin.ModelAdmin):
 @admin.register(Step)
 class StepAdmin(admin.ModelAdmin):
     list_filter = ('name', )
+    inlines = [StepAdminInline]
+
 
 
 @admin.register(Button)

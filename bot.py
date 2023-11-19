@@ -29,6 +29,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=getattr(logging, LOG_LEVEL.upper(), None),
     filename='bot.log',
+    encoding='utf-8',
 )
 
 
@@ -39,7 +40,7 @@ BACK = 'Назад'
 def send_step(update, context, step_id):
     if step_id != START:
         step = Step.objects.get(id=step_id)
-        buttons = step.buttons.all()
+        buttons = step.buttons.all().order_by("order")
         step_text = step.text
         keyboard = [
             [KeyboardButton(button.text)] for button in buttons

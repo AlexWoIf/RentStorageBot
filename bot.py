@@ -33,12 +33,13 @@ logging.basicConfig(
 )
 
 
-START = 0
+START_STEP_ID = 0
+ROOT_STEP_ID = 1
 BACK = 'Назад'
 
 
 def send_step(update, context, step_id):
-    if step_id != START:
+    if step_id != START_STEP_ID:
         step = Step.objects.get(id=step_id)
         buttons = step.buttons.all().order_by("order")
         step_text = step.text
@@ -68,8 +69,8 @@ def main_handler(update: Update, context: CallbackContext):
     logging.debug(f'{step_id=}')
     if not step_id:
         if '/start' in update.message.text:
-            add_step_to_session(update.message.from_user.id, 1)
-            send_step(update, context, 1)
+            add_step_to_session(update.message.from_user.id, ROOT_STEP_ID)
+            send_step(update, context, ROOT_STEP_ID)
         return
     step = Step.objects.get(id=step_id)
     buttons = step.buttons.all()

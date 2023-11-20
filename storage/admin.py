@@ -35,7 +35,6 @@ class StepAdmin(admin.ModelAdmin):
     inlines = [StepAdminInline]
 
 
-
 @admin.register(Button)
 class ButtonAdmin(admin.ModelAdmin):
     list_filter = ('text', )
@@ -44,3 +43,11 @@ class ButtonAdmin(admin.ModelAdmin):
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     list_filter = ('user', )
+    list_display = ('user', 'get_telegram_id')
+    readonly_fields = ('get_telegram_id',)
+
+    def get_telegram_id(self, obj):
+        return obj.user.telegram_id
+
+    get_telegram_id.short_description = 'Telegram ID'
+
